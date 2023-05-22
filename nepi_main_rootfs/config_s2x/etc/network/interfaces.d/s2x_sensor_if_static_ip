@@ -1,0 +1,7 @@
+auto eth1
+iface eth1 inet static
+    address 192.168.0.103/24
+    gateway 192.168.0.103
+    # This interface includes special iptables rules to make end devices available over the eth0 interface, too
+    pre-up iptables-restore < /opt/nepi/config/etc/s2x_iptables.rules
+
