@@ -26,6 +26,9 @@ sudo cp ${HOME_DIR}/config/etc/network/interfaces.d/nepi_static_ip /etc/network/
 cp ${HOME_DIR}/resources/README_This_is_not_your_filesystem.txt /home/nepi/Desktop/
 cp ${HOME_DIR}/resources/README_This_is_not_your_filesystem.txt /home/nepi
 
+# Set the hostname
+sudo echo "nepi-init-rootfs" > /etc/hostname
+
 # Copy all the required files around the filesystem
 sudo cp ${HOME_DIR}/rootfs_ab_handling/nepi_rootfs_ab_handling.service /etc/systemd/system
 sudo cp ${HOME_DIR}/rootfs_ab_handling/nepi_rootfs_ab_custom_env.sh /opt/nepi/

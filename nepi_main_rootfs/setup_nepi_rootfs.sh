@@ -33,6 +33,11 @@ sudo chown -R nepi:nepi /opt/nepi
 # generated below land
 sudo cp -r ${HOME_DIR}/config /opt/nepi
 
+# Set up the default hostname
+# Hostname Setup - the link target file may be updated by NEPI specialization scripts, but no link will need to move
+sudo mv /etc/hostname /etc/hostname.bak
+sudo ln -sf /opt/nepi/config/etc/hostname /etc/hostname
+
 # Update the Desktop background image
 echo "Updating Desktop background image"
 sudo mkdir -p /opt/nepi/resources
@@ -98,7 +103,7 @@ sudo apt install libffi-dev # Required for python cryptography library
 sudo -H pip install onvif # Necessary for nepi_edge_sdk_onvif
 
 sudo apt install scons # Required for num_gpsd
-sudo apt install zstd # Required for Jetson SDK installer
+sudo apt install zstd # Required for Zed SDK installer
 
 # Install Base Node.js Tools and Packages (Required for RUI, etc.)
 curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
