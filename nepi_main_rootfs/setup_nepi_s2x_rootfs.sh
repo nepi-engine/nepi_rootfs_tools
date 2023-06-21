@@ -26,6 +26,6 @@ sudo mkdir -p /mnt/nepi_storage/logs
 sudo mkdir -p /mnt/nepi_storage/nepi_full_img
 sudo mkdir -p /mnt/nepi_storage/nepi_full_img_archive
 # Set ownership and permissions properly - Awkardly, samba seems to use a mixed bag of samba and system authentication, but the following works
-sudo chown -R nepi:sambashare /mnt/nepi_storage/*
-sudo chmod -R 0775 /mnt/nepi_storage/*
+sudo chown -R nepi:sambashare /mnt/nepi_storage
+sudo chmod -R 0775 /mnt/nepi_storage
 
