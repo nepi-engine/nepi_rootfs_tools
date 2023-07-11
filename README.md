@@ -67,13 +67,13 @@ to check and configure the SSD
 4. Follow fdisk menu options (*m* will print the help menu) to create the three partitions. Make sure that you
     * Create a GPT partition table if this is a new disk
     * Use default start sectors
-    * When prompted for partition sizes, use *+32G* (or larger) for A/B partitions. The final "DATA" partition can be the remaining space on the SSD
+    * When prompted for partition sizes, use *+30G* (or larger) for A/B partitions. The final "DATA" partition can be the remaining space on the SSD
     * Make sure to write the table and exit with *w* command
 5. Mount the third partition (DATA) to provide a local staging location for the NEPI system image
     ```
     $ sudo mkdir /mnt/tmp && sudo mount /dev/nvme0n1p3 /mnt/tmp
     ```
-6. Copy the NEPI image file from the host system to the device's */mnt/tmp* directory, e.g. via SCP or a graphical file transfer client app.
+6. Copy the NEPI image file from the host system to the device's */mnt/tmp* directory, e.g. via SCP or a graphical file transfer client app. This image can be the same base image that was used in "Installing the INIT ROOTFS" above or it can be an existing NEPI-preinstalled image for your particular platform.
 7. Deploy the image to the A and B partitions
     ```
     $ sudo dd if=/mnt/tmp/nepi_rootfs.img.raw of=/dev/nvme0n1p1 bs=64M status=progress
@@ -81,7 +81,14 @@ to check and configure the SSD
     $ sudo rm /mnt/tmp/nepi_rootfs.img.raw
     ```
 where the image filename *nepi_rootfs.img.raw* should be customized as necessary.
-8. Following successful copy of the images to the A and B partitions, reboot the device. The system should boot into the ACTIVE partition with a complete NEPI deployment running. The NEPI RUI should be accessible from a host web browser at http://192.168.179.103:5003
+8. It is a good idea here to resize the ROOTFS filesystems for the entire partition size you set in step 4. above so that you can use the full partition size for filesystem additions.
+    ```
+    $ sudo e2fsck -f /dev/nvme0n1p1
+    $ sudo resize2fs /dev/nvme0n1p1
+    $ sudo e2fsck -f /dev/nvme0n1p2
+    $ sudo resize2fs /dev/nvme0n1p2
+    ```
+9. Following successful copy of the images to the A and B partitions, reboot the device. The system should boot into the ACTIVE partition with a complete NEPI deployment running. The NEPI RUI should be accessible from a host web browser at http://192.168.179.103:5003
 
 ### Further Updates to A/B Partitions ###
 Once the initial deployment succeeds, NEPI onboard tools can be used to streamline the process of updating and reverting software. Consult NEPI software update documentation for additional details.
