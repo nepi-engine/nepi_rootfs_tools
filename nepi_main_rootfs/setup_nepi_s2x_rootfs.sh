@@ -25,6 +25,7 @@ sudo mkdir -p /mnt/nepi_storage/logs
 # For S2X, the software update/archive folders are in nepi_storage, too... but that is not always the case (e.g., updated from USB)
 sudo mkdir -p /mnt/nepi_storage/nepi_full_img
 sudo mkdir -p /mnt/nepi_storage/nepi_full_img_archive
+sudo mkdir -p /mnt/nepi_storage/license
 # Set ownership and permissions properly - Awkardly, samba seems to use a mixed bag of samba and system authentication, but the following works
 sudo chown -R nepi:sambashare /mnt/nepi_storage
 sudo chmod -R 0775 /mnt/nepi_storage

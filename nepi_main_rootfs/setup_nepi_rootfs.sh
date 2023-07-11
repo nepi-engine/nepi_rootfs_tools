@@ -102,6 +102,9 @@ sudo apt install libffi-dev # Required for python cryptography library
 # NEPI runtime python dependencies. Must install these in system folders such that they are on root user's python path
 sudo -H pip install onvif # Necessary for nepi_edge_sdk_onvif
 
+# NEPI runtime python3 dependencies. Must install these in system folders such that they are on root user's python path
+sudo -H pip3 install python-gnupg websockets
+
 sudo apt install scons # Required for num_gpsd
 sudo apt install zstd # Required for Zed SDK installer
 sudo apt install dos2unix # Required for robust automation_mgr
@@ -149,11 +152,16 @@ sudo mkdir /home/nepi/.ros
 sudo chown -R nepi:nepi /home/nepi/.ros
 
 # Install nepi-link dependencies
-mkdir /opt/
 sudo apt install socat protobuf-compiler python3-pip
 pip3 install virtualenv
 
-# Shut down NetworkManager... causes issues with NEPI IP addr. management
+# Set up nepi_check (license management, etc.)
+chmod +x /opt/nepi/config/etc/nepi/nepi_check.py
+sudo cp /opt/nepi/config/etc/nepi/nepi_check.service /etc/systemd/system/
+sudo systemctl enable nepi_check
+gpg --import /opt/nepi/config/etc/nepi/nepi_license_management_public_key.gpg
+
+# Disable NetworkManager (for next boot)... causes issues with NEPI IP addr. management
 sudo systemctl disable NetworkManager
 
 # Clean-up unnecessary installed s/w
