@@ -140,13 +140,19 @@ ADDITIONAL_ROS_PACKAGES="python3-catkin-tools \
     ros-${ROS_VERSION}-pcl-ros \
     ros-${ROS_VERSION}-web-video-server \
     ros-${ROS_VERSION}-camera-info-manager \
-    ros-${ROS_VERSION}-tf2-geometry-msgs"
+    ros-${ROS_VERSION}-tf2-geometry-msgs \
+    ros-${ROS_VERSION}-mavros \
+    ros-${ROS_VERSION}-mavros-extras" \
+
     # Deprecated ROS packages?
     #ros-${ROS_VERSION}-tf-conversions
     #ros-${ROS_VERSION}-diagnostic-updater 
     #ros-${ROS_VERSION}-vision-msgs
 
 sudo apt install $ADDITIONAL_ROS_PACKAGES
+
+# Mavros requires some additional setup for geographiclib
+sudo /opt/ros/melodic/lib/mavros/install_geographiclib_datasets.sh
 
 # Need to change the default .ros folder permissions for some reason
 sudo mkdir /home/nepi/.ros
