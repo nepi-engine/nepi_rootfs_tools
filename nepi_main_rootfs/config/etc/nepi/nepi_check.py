@@ -12,8 +12,10 @@ import websockets
 import random
 
 NEPI_LICENSE_FOLDER = '/mnt/nepi_storage/license'
-NEPI_LICENSE_FILEPATH = NEPI_LICENSE_FOLDER + '/nepi_license.gpg'
-NEPI_LICENSE_REQUEST_FILEPATH = NEPI_LICENSE_FOLDER + '/nepi_license_request.yaml'
+NEPI_LICENSE_BASENAME = NEPI_LICENSE_FOLDER + '/nepi_license_'
+NEPI_LICENSE_EXTENSION = '.gpg'
+NEPI_LICENSE_REQUEST_BASENAME = NEPI_LICENSE_FOLDER + '/nepi_license_request_'
+NEPI_LICENSE_REQUEST_EXTENSION = '.yaml'
 NEPI_GPG_KEYPATH = '/home/nepi/.gnupg'
 NEPI_VERSION_FILE = '/opt/nepi/ros/etc/fw_version.txt'
 LICENSE_WARNING_FILE = '/home/nepi/DEVELOPER_LICENSE_NOT_FOR_COMMERCIAL_USE.txt'
@@ -42,13 +44,15 @@ def getNEPIVersion():
 
 def checkLicense():
     try:
-        if not os.path.exists(NEPI_LICENSE_FILEPATH):
-            raise Exception("License file not found")
+        detected_key = getHardwareId()
+        license_fullpath = NEPI_LICENSE_BASENAME + detected_key + NEPI_LICENSE_EXTENSION
+        if not os.path.exists(license_fullpath):
+            raise Exception("License file not found: " + license_fullpath)
 
         gpg = gnupg.GPG(gnupghome=NEPI_GPG_KEYPATH)
         
         license_text = ''
-        with open(NEPI_LICENSE_FILEPATH, 'rb') as license_file:
+        with open(license_fullpath, 'rb') as license_file:
             license_obj = gpg.decrypt_file(license_file, always_trust=True, extra_args=['--ignore-time-conflict'])
             #print('ok:' + str(license_obj.ok) + ", status: " + license_obj.status + ", stderr: " + license_obj.stderr)
             #if (not license_obj.ok):
@@ -66,7 +70,6 @@ def checkLicense():
         if ('hardware_key' not in nb_license_contents):
             raise Exception("Missing h/w key")
         
-        detected_key = getHardwareId()
         if detected_key != nb_license_contents['hardware_key']:
             raise Exception("H/W key mismatch")
         
@@ -118,8 +121,17 @@ def generateLicenseRequest():
     version = getNEPIVersion()
     request_yaml = "license_request:\n" + "  hardware_key: " + hardware_id + "\n  date: " + date + "\n  version: " + version + \
                    "  instructions: To request a commercial license, email this file to nepi@numurus.com"
+    
+    if not os.path.exists(NEPI_LICENSE_FOLDER):
+        os.mkdir(NEPI_LICENSE_FOLDER, mode=775)
 
-    with open(NEPI_LICENSE_REQUEST_FILEPATH, 'w') as f:
+    try:
+        detected_key = getHardwareId()
+    except:
+        detected_key = '_BAD_HARDWARE_ID'
+
+    request_file_full_path = NEPI_LICENSE_REQUEST_BASENAME + detected_key + NEPI_LICENSE_REQUEST_EXTENSION
+    with open(request_file_full_path, 'w') as f:
         f.write(request_yaml)
 
     return request_yaml
