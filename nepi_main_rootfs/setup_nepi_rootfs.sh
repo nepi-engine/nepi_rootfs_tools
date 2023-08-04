@@ -109,6 +109,7 @@ sudo apt install scons # Required for num_gpsd
 sudo apt install zstd # Required for Zed SDK installer
 sudo apt install dos2unix # Required for robust automation_mgr
 sudo apt install libv4l-dev v4l-utils # V4L Cameras (USB, etc.)
+sudo apt install hostapd # WiFi access point setup
 
 # Install Base Node.js Tools and Packages (Required for RUI, etc.)
 curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
