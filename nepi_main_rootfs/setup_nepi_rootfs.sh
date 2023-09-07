@@ -67,6 +67,10 @@ ln -sf /opt/nepi/config/home/nepi/ssh/authorized_keys /home/nepi/.ssh/authorized
 sudo chown nepi:nepi /home/nepi/.ssh/authorized_keys
 chmod 0600 /home/nepi/.ssh/authorized_keys
 
+# Set up some udev rules for plug-and-play hardware
+# IQR Pan/Tilt
+sudo ln -sf /opt/nepi/config/etc/udev/rules.d/56-iqr-pan-tilt.rules /etc/udev/rules.d/56-iqr-pan-tilt.rules
+
 # Disable apport to avoid crash reports on a display
 sudo systemctl disable apport
 
@@ -143,7 +147,8 @@ ADDITIONAL_ROS_PACKAGES="python3-catkin-tools \
     ros-${ROS_VERSION}-camera-info-manager \
     ros-${ROS_VERSION}-tf2-geometry-msgs \
     ros-${ROS_VERSION}-mavros \
-    ros-${ROS_VERSION}-mavros-extras" \
+    ros-${ROS_VERSION}-mavros-extras \
+    ros-${ROS_VERSION}-serial" 
 
     # Deprecated ROS packages?
     #ros-${ROS_VERSION}-tf-conversions
