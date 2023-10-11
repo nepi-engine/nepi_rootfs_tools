@@ -68,8 +68,10 @@ sudo chown nepi:nepi /home/nepi/.ssh/authorized_keys
 chmod 0600 /home/nepi/.ssh/authorized_keys
 
 # Set up some udev rules for plug-and-play hardware
-# IQR Pan/Tilt
+  # IQR Pan/Tilt
 sudo ln -sf /opt/nepi/config/etc/udev/rules.d/56-iqr-pan-tilt.rules /etc/udev/rules.d/56-iqr-pan-tilt.rules
+  # USB Power Saving on Cameras Disabled
+sudo ln -sf /opt/nepi/config/etc/udev/rules.d/92-usb-input-no-powersave.rules /etc/udev/rules.d/92-usb-input-no-powersave.rules
 
 # Disable apport to avoid crash reports on a display
 sudo systemctl disable apport
