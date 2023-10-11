@@ -38,6 +38,9 @@ sudo cp -r ${HOME_DIR}/config /opt/nepi
 sudo mv /etc/hostname /etc/hostname.bak
 sudo ln -sf /opt/nepi/config/etc/hostname /etc/hostname
 
+# Install any low-level drivers
+sudo cp ${HOME_DIR}/resources/wifi_drivers/* /lib/firmware
+
 # Update the Desktop background image
 echo "Updating Desktop background image"
 sudo mkdir -p /opt/nepi/resources
