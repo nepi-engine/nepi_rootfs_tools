@@ -134,10 +134,10 @@ sudo chown :sambashare /mnt/nepi_storage
 # Install ROS Melodic (-desktop, which includes important packages)
 # This script should be useful even on non-Jetson (but ARM-based) systems,
 # hence included here rather than in the Jetson-specific setup script.
-mkdir tmp && cd tmp
-git clone https://github.com/jetsonhacks/installROS.git
+sudo mkdir tmp && cd tmp
+sudo git clone https://github.com/jetsonhacks/installROS.git
 cd installROS
-./installROS.sh -p ros-melodic-desktop
+sudo ./installROS.sh -p ros-melodic-desktop
 cd ../..
 rm -rf ./tmp
 
