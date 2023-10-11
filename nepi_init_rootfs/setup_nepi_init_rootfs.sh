@@ -19,6 +19,7 @@ sudo chown nepi:nepi /opt/nepi/resources/nepi_wallpaper.png
 gsettings set org.gnome.desktop.background picture-uri file:////opt/nepi/resources/nepi_wallpaper.png
 
 # Add a static IP address for guaranteed network reachability
+sudo mkdir -p /etc/network/interfaces.d
 sudo cp ${HOME_DIR}/config/etc/network/interfaces.d/nepi_static_ip /etc/network/interfaces.d/
 
 # Add the informative README to the Desktop and Home folder to make it highly visible whether user comes
