@@ -1,16 +1,27 @@
 #!/bin/bash
 
 ########## Preliminaries, before parent script can run ##########
-# Set up a user account
-useradd -m nepi
-echo "Enter nepi at password prompt below"
-passwd nepi
 
-# Install sudo... parent script expects it
-apt install sudo
+########## Run first as root user to set up the nepi user and requirements ##############
+if [ "$(whoami)" != "nepi" ]; then
+    echo "Running root-user preliminaries"
+        
+    # Set up a user account
+    useradd -m nepi
+    echo "Enter nepi at password prompt below"
+    passwd nepi
 
-# Change to the new nepi user... parent script expects it
-su nepi
+    # Install sudo... parent script expects it
+    apt install sudo
+
+    usermod -aG sudo nepi
+
+    echo "Now switch to nepi user via \"# su nepi\" and rerun this script"
+    exit
+fi
+######### End root user setup ############################################################
+
+
 
 # Install git
 sudo apt install git
@@ -48,7 +59,7 @@ sudo chmod -R 0775 /mnt/nepi_storage
 sudo ln -sf /opt/nepi/config/etc/network/interfaces /etc/network/interfaces
 
 # Install some necessary network tools
-sudo apt install ifupdown net-tools isc-dhcp-client
+sudo apt install ifupdown net-tools isc-dhcp-client rsync
 
 # Apparmor must be disabled -- it is blocking chrony from running off the NEPI config file, even after removing the usr.sbin.chronyd profile
 # Could be that there is a much less heavy-handed approach here, but for now just fully disabling
