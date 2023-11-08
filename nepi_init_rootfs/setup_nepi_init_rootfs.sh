@@ -22,6 +22,10 @@ gsettings set org.gnome.desktop.background picture-uri file:////opt/nepi/resourc
 sudo mkdir -p /etc/network/interfaces.d
 sudo cp ${HOME_DIR}/config/etc/network/interfaces.d/nepi_static_ip /etc/network/interfaces.d/
 
+# Install static IP tools
+echo "Installing static IP dependencies"
+sudo apt install ifupdown net-tools
+
 # Add the informative README to the Desktop and Home folder to make it highly visible whether user comes
 # in graphically or at cmd line (e.g., SSH).
 cp ${HOME_DIR}/resources/README_This_is_not_your_filesystem.txt /home/nepi/Desktop/

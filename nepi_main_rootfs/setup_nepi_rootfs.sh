@@ -5,9 +5,6 @@
 # This script is tested to run from a fresh Ubuntu 18.04 install based on the L4T reference rootfs.
 # Other base rootfs schemes may work, but should be tested.
 
-# Settable values
-ROS_VERSION=melodic
-
 # Preliminary checks
 # Internet connectivity:
 sudo dhclient
@@ -83,6 +80,10 @@ sudo systemctl disable apport
 sudo apt update
 sudo apt upgrade
 
+# Install static IP tools
+echo "Installing static IP dependencies"
+sudo apt install ifupdown net-tools
+
 # Install and configure chrony
 echo "Installing chrony for NTP services"
 sudo apt install chrony
@@ -112,7 +113,7 @@ sudo apt install libffi-dev # Required for python cryptography library
 sudo -H pip install onvif # Necessary for nepi_edge_sdk_onvif
 
 # NEPI runtime python3 dependencies. Must install these in system folders such that they are on root user's python path
-sudo -H pip3 install python-gnupg websockets
+sudo -H pip3 install python-gnupg websockets onvif_zeep
 
 sudo apt install scons # Required for num_gpsd
 sudo apt install zstd # Required for Zed SDK installer
@@ -131,19 +132,37 @@ nvm install 8.11.1 # RUI-required Node version as of this script creation
 sudo mkdir /mnt/nepi_storage
 sudo chown :sambashare /mnt/nepi_storage
 
-# Install ROS Melodic (-desktop, which includes important packages)
-# This script should be useful even on non-Jetson (but ARM-based) systems,
-# hence included here rather than in the Jetson-specific setup script.
-sudo mkdir tmp && cd tmp
-sudo git clone https://github.com/jetsonhacks/installROS.git
-cd installROS
-sudo ./installROS.sh -p ros-melodic-desktop
-cd ../..
-rm -rf ./tmp
+DISTRIBUTION_CODE_NAME=$( lsb_release -sc )
+ROS_VERSION=""
+case $DISTRIBUTION_CODE_NAME in
+  "bionic" )
+    ROS_VERSION=melodic
+    # Install ROS Melodic (-desktop, which includes important packages)
+    # This script should be useful even on non-Jetson (but ARM-based) systems,
+    # hence included here rather than in the Jetson-specific setup script.
+    sudo mkdir tmp && cd tmp
+    sudo git clone https://github.com/jetsonhacks/installROS.git
+    cd installROS
+    sudo ./installROS.sh -p ros-melodic-desktop
+    cd ../..
+    rm -rf ./tmp
 
-# Clean up some unwanted .bashrc artifacts of the ROS install process
-sed -i 's:source /opt/ros/melodic/setup.bash:\n\#Automatically sourcing setup.bash interferes with ROS1/ROS2 interops\n#source /opt/ros/melodic/setup.bash:g' /home/nepi/.bashrc
-sed -i 's:export ROS_IP=:#export ROS_IP=:g' /home/nepi/.bashrc
+    # Clean up some unwanted .bashrc artifacts of the ROS install process
+    sed -i 's:source /opt/ros/melodic/setup.bash:\n\#Automatically sourcing setup.bash interferes with ROS1/ROS2 interops\n#source /opt/ros/melodic/setup.bash:g' /home/nepi/.bashrc
+    sed -i 's:export ROS_IP=:#export ROS_IP=:g' /home/nepi/.bashrc
+  ;;
+  "focal" )
+    ROS_VERSION=noetic
+    # Install ROS Noetic (-desktop, which includes important packages) using standard installation instructions
+    sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
+    sudo apt install curl
+    curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key add -
+    sudo apt update
+    sudo apt install ros-noetic-desktop
+  ;;
+  *)
+    echo "The remainder of this script is not set up for this Ubuntu version"
+    exit 0
 
 ADDITIONAL_ROS_PACKAGES="python3-catkin-tools \
     ros-${ROS_VERSION}-rosbridge-server \
@@ -163,7 +182,7 @@ ADDITIONAL_ROS_PACKAGES="python3-catkin-tools \
 sudo apt install $ADDITIONAL_ROS_PACKAGES
 
 # Mavros requires some additional setup for geographiclib
-sudo /opt/ros/melodic/lib/mavros/install_geographiclib_datasets.sh
+sudo /opt/ros/${ROS_VERSION}/lib/mavros/install_geographiclib_datasets.sh
 
 # Need to change the default .ros folder permissions for some reason
 sudo mkdir /home/nepi/.ros
