@@ -1,0 +1,6 @@
+# Some helpful aliases for NEPI
+alias rosstop="sudo systemctl stop roslaunch"
+alias rosstart="sudo /opt/nepi/ros/etc/roslaunch.sh"
+alias auto="cd /mnt/nepi_storage/automation_scripts/"
+alias data="cd /mnt/nepi_storage/data/"
+alias ai="cd /mnt/nepi_storage/ai_models/"

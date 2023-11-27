@@ -35,6 +35,9 @@ sudo cp -r ${HOME_DIR}/config /opt/nepi
 sudo mv /etc/hostname /etc/hostname.bak
 sudo ln -sf /opt/nepi/config/etc/hostname /etc/hostname
 
+# Set up bash aliases
+ln -sf /opt/nepi/config/home/nepi/nepi_bash_aliases /home/nepi/.bash_aliases
+
 # Install any low-level drivers
 sudo cp ${HOME_DIR}/resources/wifi_drivers/* /lib/firmware
 
@@ -113,13 +116,14 @@ sudo apt install libffi-dev # Required for python cryptography library
 sudo -H pip install onvif # Necessary for nepi_edge_sdk_onvif
 
 # NEPI runtime python3 dependencies. Must install these in system folders such that they are on root user's python path
-sudo -H pip3 install python-gnupg websockets onvif_zeep
+sudo -H pip install python-gnupg websockets onvif_zeep geographiclib
 
 sudo apt install scons # Required for num_gpsd
 sudo apt install zstd # Required for Zed SDK installer
 sudo apt install dos2unix # Required for robust automation_mgr
 sudo apt install libv4l-dev v4l-utils # V4L Cameras (USB, etc.)
 sudo apt install hostapd # WiFi access point setup
+sudo apt install curl # Node.js installation below
 
 # Install Base Node.js Tools and Packages (Required for RUI, etc.)
 curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
@@ -132,6 +136,7 @@ nvm install 8.11.1 # RUI-required Node version as of this script creation
 sudo mkdir /mnt/nepi_storage
 sudo chown :sambashare /mnt/nepi_storage
 
+#THERE MAY BE SOMETHING WRONG WITH THE FOLLOWING: FOR LOOP ERRORS OUT, NO ROS GETS INSTALLED
 DISTRIBUTION_CODE_NAME=$( lsb_release -sc )
 ROS_VERSION=""
 case $DISTRIBUTION_CODE_NAME in
@@ -147,8 +152,8 @@ case $DISTRIBUTION_CODE_NAME in
     cd ../..
     rm -rf ./tmp
 
-    # Clean up some unwanted .bashrc artifacts of the ROS install process
-    sed -i 's:source /opt/ros/melodic/setup.bash:\n\#Automatically sourcing setup.bash interferes with ROS1/ROS2 interops\n#source /opt/ros/melodic/setup.bash:g' /home/nepi/.bashrc
+    # Update some .bashrc artifacts of the ROS install process
+    sed -i 's:source /opt/ros/melodic/setup.bash:source /opt/nepi/ros/setup.bash:g' /home/nepi/.bashrc
     sed -i 's:export ROS_IP=:#export ROS_IP=:g' /home/nepi/.bashrc
   ;;
   "focal" )
@@ -159,10 +164,15 @@ case $DISTRIBUTION_CODE_NAME in
     curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key add -
     sudo apt update
     sudo apt install ros-noetic-desktop
+    # Update some .bashrc settings
+    echo "# Automatically source NEPI ROS environment" >> /home/nepi/.bashrc
+    echo "source /opt/nepi/ros/setup.bash" >> /home/nepi/.bashrc
   ;;
   *)
-    echo "The remainder of this script is not set up for this Ubuntu version"
-    exit 0
+    echo "The remainder of this script is not set up for this Ubuntu version: $DISTRIBUTION_CODE_NAME"
+    exit 1
+  ;;
+esac
 
 ADDITIONAL_ROS_PACKAGES="python3-catkin-tools \
     ros-${ROS_VERSION}-rosbridge-server \
@@ -203,6 +213,4 @@ sudo systemctl disable NetworkManager
 
 # Clean-up unnecessary installed s/w
 sudo apt autoremove
-
-
 
