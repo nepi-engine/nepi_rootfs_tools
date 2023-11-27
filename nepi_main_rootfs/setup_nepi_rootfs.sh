@@ -107,7 +107,7 @@ printf "nepi_user\nnepi_user\n" | sudo smbpasswd -a nepi_user
 
 # Install Base Python Packages
 echo "Installing base python packages"
-sudo apt install python-pip
+sudo apt install python3-pip
 pip install --user -U pip
 pip install --user virtualenv
 sudo apt install libffi-dev # Required for python cryptography library
@@ -199,8 +199,8 @@ sudo mkdir /home/nepi/.ros
 sudo chown -R nepi:nepi /home/nepi/.ros
 
 # Install nepi-link dependencies
-sudo apt install socat protobuf-compiler python3-pip
-pip3 install virtualenv
+sudo apt install socat protobuf-compiler
+pip install virtualenv
 
 # Set up nepi_check (license management, etc.)
 chmod +x /opt/nepi/config/etc/nepi/nepi_check.py
