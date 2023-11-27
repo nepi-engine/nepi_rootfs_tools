@@ -1,5 +1,19 @@
 #!/bin/bash
 
+read -p "Does this device have EMMC (Xavier, etc) or not (Orin, etc)? Enter y/n:" response
+case "$response" in
+    [yY][eE][sS]|[yY]
+        HAS_EMMC=Y
+    ;;
+    [nN][oO]|[nN]
+        HAS_EMMC=N
+    ;;
+    *)
+        echo "Invalid response: " + $response
+        exit 1
+    ;;
+esac
+
 # S2X-specific NEPI rootfs setup steps. This is a specialization of the NEPI Jetson rootfs
 # and calls that parent script as a pre-step.
 
@@ -12,9 +26,14 @@ HOME_DIR=$PWD
 # Copy the S2X-specialized Linux config files
 sudo cp -r ${HOME_DIR}/config_s2x/* /opt/nepi/config
 
-# Link S2X fstab (mounts SSD partition 3 as nepi_storage)
+# Update fstab - new file depends on whether this S2X has init rootfs on EMMC or NVME
 sudo mv /etc/fstab /etc/fstab.bak
-sudo ln -sf /opt/nepi/config/etc/fstab /etc/fstab
+if [ $HAS_EMMC = 'Y' ]; then
+    # NEPI Storage (SSD partition 3)
+    sudo ln -sf /opt/nepi/config/etc/fstab_emmc /etc/fstab
+else
+    # NEPI Storage (SSD partition 4)
+    sudo ln -sf /opt/nepi/config/etc/fstab_nvme_only /etc/fstab
 
 # And mount it to ensure that expected nepi_storage folders exist
 sudo mount /mnt/nepi_storage
