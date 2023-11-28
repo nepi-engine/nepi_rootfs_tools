@@ -38,7 +38,7 @@ else
 # And mount it to ensure that expected nepi_storage folders exist
 sudo mount /mnt/nepi_storage
 sudo mkdir -p /mnt/nepi_storage/data
-sudo mkdir -p /mnt/nepi_storage/ai_models
+sudo mkdir -p /mnt/nepi_storage/ai_models/darknet_ros/config
 sudo mkdir -p /mnt/nepi_storage/automation_scripts
 sudo mkdir -p /mnt/nepi_storage/logs
 # For S2X, the software update/archive folders are in nepi_storage, too... but that is not always the case (e.g., updated from USB)
