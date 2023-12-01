@@ -99,11 +99,6 @@ sudo apt install samba
 sudo mv /etc/samba/smb.conf /etc/samba/smb.conf.bak
 sudo ln -sf /opt/nepi/config/etc/samba/smb.conf /etc/samba/smb.conf
 printf "nepi\nnepi\n" | sudo smbpasswd -a nepi
-# Create the unprivileged user account and samba credentials
-sudo useradd nepi_user
-printf "nepi_user\nnepi_user\n" | sudo passwd nepi_user
-sudo usermod -a -G sambashare nepi_user
-printf "nepi_user\nnepi_user\n" | sudo smbpasswd -a nepi_user
 
 # Install Base Python Packages
 echo "Installing base python packages"
