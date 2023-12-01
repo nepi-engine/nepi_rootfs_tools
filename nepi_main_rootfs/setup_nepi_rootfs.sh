@@ -111,7 +111,7 @@ sudo apt install libffi-dev # Required for python cryptography library
 sudo -H pip install onvif # Necessary for nepi_edge_sdk_onvif
 
 # NEPI runtime python3 dependencies. Must install these in system folders such that they are on root user's python path
-sudo -H pip install python-gnupg websockets onvif_zeep geographiclib
+sudo -H pip install python-gnupg websockets onvif_zeep geographiclib PyGeodesy
 
 sudo apt install scons # Required for num_gpsd
 sudo apt install zstd # Required for Zed SDK installer
