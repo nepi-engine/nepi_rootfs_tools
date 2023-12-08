@@ -57,6 +57,10 @@ sudo ln -sf /opt/nepi/config/usr/share/gnome-shell/theme/ubuntu.css /usr/share/g
 sudo mv /etc/network/interfaces.d /etc/network/interfaces.d.bak
 sudo ln -sf /opt/nepi/config/etc/network/interfaces.d /etc/network/interfaces.d
 
+# Set up DHCP
+sudo mv /etc/dhcp/dhclient.conf /etc/dhcp/dhclient.conf.bak
+sudo ln -sf /opt/nepi/config/etc/dhcp/dhclient.conf /etc/dhcp/dhclient.conf
+
 # Set up SSH
 sudo mv /etc/ssh/sshd_config /etc/ssh/sshd_config.bak
 sudo ln -sf /opt/nepi/config/etc/ssh/sshd_config /etc/ssh/sshd_config
