@@ -49,9 +49,10 @@ sudo chown nepi:nepi /opt/nepi/resources/nepi_wallpaper.png
 gsettings set org.gnome.desktop.background picture-uri file:////opt/nepi/resources/nepi_wallpaper.png
 
 # Update the login screen background image - handled by a sys. config file
-echo "Updating login screen background image"
-sudo mv /usr/share/gnome-shell/theme/ubuntu.css /usr/share/gnome-shell/theme/ubuntu.css.bak
-sudo ln -sf /opt/nepi/config/usr/share/gnome-shell/theme/ubuntu.css /usr/share/gnome-shell/theme/ubuntu.css
+# No longer works as of Ubuntu 20.04 -- there are some Github scripts that could replace this -- change-gdb-background
+#echo "Updating login screen background image"
+#sudo mv /usr/share/gnome-shell/theme/ubuntu.css /usr/share/gnome-shell/theme/ubuntu.css.bak
+#sudo ln -sf /opt/nepi/config/usr/share/gnome-shell/theme/ubuntu.css /usr/share/gnome-shell/theme/ubuntu.css
 
 # Set up static IP addr.
 sudo mv /etc/network/interfaces.d /etc/network/interfaces.d.bak
@@ -73,6 +74,8 @@ chmod 0600 /opt/nepi/config/home/nepi/ssh/authorized_keys
 ln -sf /opt/nepi/config/home/nepi/ssh/authorized_keys /home/nepi/.ssh/authorized_keys
 sudo chown nepi:nepi /home/nepi/.ssh/authorized_keys
 chmod 0600 /home/nepi/.ssh/authorized_keys
+
+
 
 # Set up some udev rules for plug-and-play hardware
   # IQR Pan/Tilt
@@ -123,6 +126,8 @@ sudo apt install dos2unix # Required for robust automation_mgr
 sudo apt install libv4l-dev v4l-utils # V4L Cameras (USB, etc.)
 sudo apt install hostapd # WiFi access point setup
 sudo apt install curl # Node.js installation below
+sudo apt install gparted
+sudo apt-get install chromium-browser # At least once, apt-get seemed to work for this where apt did not, hence the command here
 
 # Install Base Node.js Tools and Packages (Required for RUI, etc.)
 curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
@@ -181,7 +186,8 @@ ADDITIONAL_ROS_PACKAGES="python3-catkin-tools \
     ros-${ROS_VERSION}-tf2-geometry-msgs \
     ros-${ROS_VERSION}-mavros \
     ros-${ROS_VERSION}-mavros-extras \
-    ros-${ROS_VERSION}-serial" 
+    ros-${ROS_VERSION}-serial" \
+    python3-rosdep 
 
     # Deprecated ROS packages?
     #ros-${ROS_VERSION}-tf-conversions
@@ -196,6 +202,10 @@ sudo /opt/ros/${ROS_VERSION}/lib/mavros/install_geographiclib_datasets.sh
 # Need to change the default .ros folder permissions for some reason
 sudo mkdir /home/nepi/.ros
 sudo chown -R nepi:nepi /home/nepi/.ros
+
+# Setup rosdep
+sudo rosdep init
+rosdep update
 
 # Install nepi-link dependencies
 sudo apt install socat protobuf-compiler
