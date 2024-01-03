@@ -94,6 +94,9 @@ sudo apt upgrade
 echo "Installing static IP dependencies"
 sudo apt install ifupdown net-tools
 
+# Convenience applications
+sudo apt install nano
+
 # Install and configure chrony
 echo "Installing chrony for NTP services"
 sudo apt install chrony

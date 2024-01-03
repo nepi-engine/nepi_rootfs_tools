@@ -50,3 +50,5 @@ else
 sudo mount /mnt/nepi_storage
 sudo chown -R nepi:sambashare /mnt/nepi_storage
 sudo chmod -R 0775 /mnt/nepi_storage
+
+# TODO: Zed SDK and zed_ros_wrapper per Stereolabs instructions
