@@ -10,7 +10,7 @@
 HOME_DIR=$PWD
 
 # Clear the Desktop
-rm /home/nepi/Desktop/*
+rm ~/Desktop/*
 
 # Update the Background Image
 sudo mkdir -p /opt/nepi/resources
@@ -28,8 +28,8 @@ sudo apt install ifupdown net-tools
 
 # Add the informative README to the Desktop and Home folder to make it highly visible whether user comes
 # in graphically or at cmd line (e.g., SSH).
-cp ${HOME_DIR}/resources/README_This_is_not_your_filesystem.txt /home/nepi/Desktop/
-cp ${HOME_DIR}/resources/README_This_is_not_your_filesystem.txt /home/nepi
+cp ${HOME_DIR}/resources/README_This_is_not_your_filesystem.txt ~/Desktop/
+cp ${HOME_DIR}/resources/README_This_is_not_your_filesystem.txt ~
 
 # Set the hostname
 sudo echo "nepi-init-rootfs" > /etc/hostname
