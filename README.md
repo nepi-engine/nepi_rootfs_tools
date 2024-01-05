@@ -30,7 +30,7 @@ This repository contains scripts and tools to convert a stock device Linux O/S t
 The installation script assumes a *systemd*-based init system and a standard Debian-like filesystem layout. If your stock O/S does not meet these requirements, you will need to inspect and customize for your system.
 
 ### Installation Steps ###
-1. Boot the device into the stock O/S and copy the *nepi_init_rootfs* folder from this repository to a convenient filesystem location on the device.
+1. Boot the device into the stock O/S and copy the *nepi_init_rootfs* folder from this repository to a convenient filesystem location on the device or clone this repository directly on the target device if internet and _git_ are available.
 2. Open a terminal on the device (SSH or native), navigate to the *nepi_init_rootfs* folder and run the *setup_nepi_init_rootfs.sh* script as root.
     ```
     $ sudo ./setup_nepi_init_rootfs.sh
@@ -43,7 +43,7 @@ The installation script assumes a *systemd*-based init system and a standard Deb
     * If a proper Main Rootfs A/B media is installed with NEPI images deployed to the appropriate partitions, the system will boot to the *ACTIVE* rootfs.
 
 ## Installing the Main A/B Rootfs from Complete Image ##
-The A/B rootfs partition media specified in *nepi_rootfs_ab_custom_env.sh* must be loaded with valid NEPI images (at the very least the *ACTIVE* partition must contain a valid image, but **it is strongly suggested that both partitions contain valid NEPI iomages, even if the initial images are identical**.
+The A/B rootfs partition media specified in *nepi_rootfs_ab_custom_env.sh* must be loaded with valid NEPI images (at the very least the *ACTIVE* partition must contain a valid image, but **it is strongly suggested that both partitions contain valid NEPI images, even if the initial images are identical**.
 
 The first step with fresh media is to prepare the partitions. This can be done at the command-line (using *parted*, *fdisk*, etc.) or from within a graphical environment (using *gparted*, *disks*, etc.) and can be performed from a host development system (with appropriate interface for the media type) or from the NEPI device's INIT Rootfs. The actual steps to partition your (media) are outside the scope of this document, but do note the following guidelines:
 * EXT4 is the *strongly* preferred filesystem type for each partitions
@@ -80,7 +80,8 @@ to check and configure the SSD
     $ sudo dd if=/mnt/tmp/nepi_rootfs.img.raw of=/dev/nvme0n1p2 bs=64M status=progress
     $ sudo rm /mnt/tmp/nepi_rootfs.img.raw
     ```
-where the image filename *nepi_rootfs.img.raw* should be customized as necessary.
+    where the image filename *nepi_rootfs.img.raw* should be customized as necessary.
+
 8. It is a good idea here to resize the ROOTFS filesystems for the entire partition size you set in step 4. above so that you can use the full partition size for filesystem additions.
     ```
     $ sudo e2fsck -f /dev/nvme0n1p1
@@ -88,6 +89,7 @@ where the image filename *nepi_rootfs.img.raw* should be customized as necessary
     $ sudo e2fsck -f /dev/nvme0n1p2
     $ sudo resize2fs /dev/nvme0n1p2
     ```
+
 9. Following successful copy of the images to the A and B partitions, reboot the device. The system should boot into the ACTIVE partition with a complete NEPI deployment running. The NEPI RUI should be accessible from a host web browser at http://192.168.179.103:5003
 
 ### Further Updates to A/B Partitions ###
@@ -96,7 +98,7 @@ Once the initial deployment succeeds, NEPI onboard tools can be used to streamli
 Note that at this point if you require further filesystem customization outside of the scope provided by the NEPI RUI or NEPI SDK/API, SSH access requires key-based authentication, so you should consult additional NEPI SSH documentation.
 
 ## Constructing the Main A/B Rootfs from a Base Image ##
-The Main NEPI image is most commonly deployed as a complete system image licensed and downloaded from Numurus, but this repository also contains tools for building the base image from a stock O/S image (e.g., Ubuntu). Those steps are detailed here.
+The Main NEPI image is commonly deployed as a complete system image licensed and downloaded from Numurus, but this repository also contains tools for building the base image from a stock O/S image (e.g., Ubuntu). Those steps are detailed here.
 
 Within the *nepi_main_rootfs* subdirectory of this repository are a collection of shell scripts that automate building the NEPI *Main* rootfs as a series of installation steps. In general, these scripts are hierarchical, so only the most specialized one must be explicitly called and it will call the less specialized scripts as necessary. The installation scripts perform a few basic steps:
 * Installation of NEPI dependencies from Debian packages
