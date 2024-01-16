@@ -110,6 +110,18 @@ sudo mv /etc/samba/smb.conf /etc/samba/smb.conf.bak
 sudo ln -sf /opt/nepi/config/etc/samba/smb.conf /etc/samba/smb.conf
 printf "nepi\nnepi\n" | sudo smbpasswd -a nepi
 
+# Install Baumer GenTL Producers (Genicam support)
+echo "Installing Baumer GAPI SDK GenTL Producers"
+# Set up the shared object links in case they weren't copied properly when this repo was moved to target
+NEPI_BAUMER_PATH=/opt/nepi/config/opt/baumer/gentl_producers
+ln -sf $NEPI_BAUMER_PATH/libbgapi2_usb.cti.2.14.1 $NEPI_BAUMER_PATH/libbgapi2_usb.cti.2.14
+ln -sf $NEPI_BAUMER_PATH/libbgapi2_usb.cti.2.14 $NEPI_BAUMER_PATH/libbgapi2_usb.cti
+ln -sf $NEPI_BAUMER_PATH/libbgapi2_gige.cti.2.14.1 $NEPI_BAUMER_PATH/libbgapi2_gige.cti.2.14
+ln -sf $NEPI_BAUMER_PATH/libbgapi2_gige.cti.2.14 $NEPI_BAUMER_PATH/libbgapi2_gige.cti
+# And the master link
+sudo ln -sf /opt/nepi/config/opt/baumer /opt/baumer
+sudo chown nepi:nepi /opt/baumer
+
 # Install Base Python Packages
 echo "Installing base python packages"
 sudo apt install python3-pip
@@ -117,11 +129,8 @@ pip install --user -U pip
 pip install --user virtualenv
 sudo apt install libffi-dev # Required for python cryptography library
 
-# NEPI runtime python dependencies. Must install these in system folders such that they are on root user's python path
-sudo -H pip install onvif # Necessary for nepi_edge_sdk_onvif
-
 # NEPI runtime python3 dependencies. Must install these in system folders such that they are on root user's python path
-sudo -H pip install python-gnupg websockets onvif_zeep geographiclib PyGeodesy
+sudo -H pip install python-gnupg websockets onvif_zeep geographiclib PyGeodesy onvif harvesters
 
 sudo apt install scons # Required for num_gpsd
 sudo apt install zstd # Required for Zed SDK installer
