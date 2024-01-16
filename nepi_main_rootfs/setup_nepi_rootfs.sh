@@ -198,8 +198,8 @@ ADDITIONAL_ROS_PACKAGES="python3-catkin-tools \
     ros-${ROS_VERSION}-tf2-geometry-msgs \
     ros-${ROS_VERSION}-mavros \
     ros-${ROS_VERSION}-mavros-extras \
-    ros-${ROS_VERSION}-serial" \
-    python3-rosdep 
+    ros-${ROS_VERSION}-serial \
+    python3-rosdep" 
 
     # Deprecated ROS packages?
     #ros-${ROS_VERSION}-tf-conversions
