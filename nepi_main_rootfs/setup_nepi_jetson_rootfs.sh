@@ -6,6 +6,9 @@
 # Run the parent script first
 sudo ./setup_nepi_rootfs.sh
 
+# The script is assumed to run from a directory structure that mirrors the Git repo it is housed in.
+HOME_DIR=$PWD
+
 # Install Jetpack SDK stuff
 # Have to uncomment entries in /etc/apt/sources.list.d/nvidia-l4t-apt-source.list
 sudo sed -i 's/\#deb/deb/g' /etc/apt/sources.list.d/nvidia-l4t-apt-source.list
