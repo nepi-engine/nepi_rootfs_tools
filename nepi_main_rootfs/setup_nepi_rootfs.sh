@@ -130,7 +130,10 @@ pip install --user virtualenv
 sudo apt install libffi-dev # Required for python cryptography library
 
 # NEPI runtime python3 dependencies. Must install these in system folders such that they are on root user's python path
-sudo -H pip install python-gnupg websockets onvif_zeep geographiclib PyGeodesy onvif harvesters
+sudo -H pip install python-gnupg websockets onvif_zeep geographiclib PyGeodesy onvif harvesters WSDiscovery
+
+# Other general python utilities
+pip install --user labelImg # For onboard training
 
 sudo apt install scons # Required for num_gpsd
 sudo apt install zstd # Required for Zed SDK installer
