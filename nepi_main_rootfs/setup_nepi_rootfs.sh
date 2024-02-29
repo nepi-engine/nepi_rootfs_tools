@@ -153,6 +153,9 @@ nvm install 8.11.1 # RUI-required Node version as of this script creation
 sudo mkdir /mnt/nepi_storage
 sudo chown :sambashare /mnt/nepi_storage
 
+# Add nepi user to dialout group to allow non-sudo serial connections
+sudo adduser nepi dialout
+
 #THERE MAY BE SOMETHING WRONG WITH THE FOLLOWING: FOR LOOP ERRORS OUT, NO ROS GETS INSTALLED
 DISTRIBUTION_CODE_NAME=$( lsb_release -sc )
 ROS_VERSION=""
