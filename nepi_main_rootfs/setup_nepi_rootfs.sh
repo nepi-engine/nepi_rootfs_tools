@@ -75,8 +75,6 @@ ln -sf /opt/nepi/config/home/nepi/ssh/authorized_keys /home/nepi/.ssh/authorized
 sudo chown nepi:nepi /home/nepi/.ssh/authorized_keys
 chmod 0600 /home/nepi/.ssh/authorized_keys
 
-
-
 # Set up some udev rules for plug-and-play hardware
   # IQR Pan/Tilt
 sudo ln -sf /opt/nepi/config/etc/udev/rules.d/56-iqr-pan-tilt.rules /etc/udev/rules.d/56-iqr-pan-tilt.rules
@@ -130,7 +128,7 @@ pip install --user virtualenv
 sudo apt install libffi-dev # Required for python cryptography library
 
 # NEPI runtime python3 dependencies. Must install these in system folders such that they are on root user's python path
-sudo -H pip install python-gnupg websockets onvif_zeep geographiclib PyGeodesy onvif harvesters WSDiscovery
+sudo -H pip install python-gnupg websockets onvif_zeep geographiclib PyGeodesy onvif harvesters WSDiscovery pyserial
 
 # Other general python utilities
 pip install --user labelImg # For onboard training
