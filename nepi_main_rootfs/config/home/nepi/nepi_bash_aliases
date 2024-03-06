@@ -5,3 +5,6 @@ alias auto="cd /mnt/nepi_storage/automation_scripts/"
 alias data="cd /mnt/nepi_storage/data/"
 alias ai="cd /mnt/nepi_storage/ai_models/"
 alias src="cd /mnt/nepi_storage/nepi_src"
+
+# Inform that this is the target hardware
+export NEPI_REMOTE_SETUP=0
